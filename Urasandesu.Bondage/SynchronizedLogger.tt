@@ -1,0 +1,136 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".g.cs" #>
+<#@ include file="ConditionalSynchronizationTemplate.t4"#>
+<#
+/* 
+ * File: SynchronizedLogger.tt
+ * 
+ * Author: Akira Sugiura (urasandesu@gmail.com)
+ * 
+ * 
+ * Copyright (c) 2017 Akira Sugiura
+ *  
+ *  This software is MIT License.
+ *  
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is
+ *  furnished to do so, subject to the following conditions:
+ *  
+ *  The above copyright notice and this permission notice shall be included in
+ *  all copies or substantial portions of the Software.
+ *  
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *  THE SOFTWARE.
+ */
+#>
+/* 
+ * File: SynchronizedLogger.g.cs
+ * 
+ * Author: Akira Sugiura (urasandesu@gmail.com)
+ * 
+ * 
+ * Copyright (c) 2017 Akira Sugiura
+ *  
+ *  This software is MIT License.
+ *  
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is
+ *  furnished to do so, subject to the following conditions:
+ *  
+ *  The above copyright notice and this permission notice shall be included in
+ *  all copies or substantial portions of the Software.
+ *  
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *  THE SOFTWARE.
+ */
+
+
+
+using Microsoft.PSharp;
+using Microsoft.PSharp.IO;
+using Microsoft.PSharp.Utilities;
+using System;
+using Urasandesu.Bondage.Internals;
+using Urasandesu.Bondage.Mixins.Microsoft.PSharp;
+using Urasandesu.Bondage.Mixins.Microsoft.PSharp.IO;
+using Urasandesu.Enkidu;
+
+namespace Urasandesu.Bondage
+{
+    public sealed partial class SynchronizedLogger : PublishableLogger, ILogger
+    {
+<#
+foreach (var template in templates)
+{
+#>
+        public override void <#= template.OverrideMethod #>(<#= template.GetMethodParameterDefinitions() #>)
+        {
+            {
+                var tuple = Tuple.Create(typeof(<#= template.HandlerType #>), <#= template.GetMethodParameters() #>);
+                m_synchronizer?.Begin(tuple).Wait();
+                base.<#= template.OverrideMethod #>(<#= template.GetMethodParameters() #>);
+                m_synchronizer?.End(tuple).Wait();
+            }
+<#
+    var handledHandlerTemplate = templates.FirstOrDefault(_ => _.IsHandledHandler(template));
+    if (handledHandlerTemplate != null)
+    {
+#>
+            {
+                var tuple = Tuple.Create(typeof(<#= handledHandlerTemplate.HandlerType #>), <#= handledHandlerTemplate.GetMethodParameters() #>);
+                ConditionalSynchronizableHelper.SetIsEveryTimeThroughSet(tuple, true);
+                m_synchronizer?.Begin(tuple).Wait();
+            }
+<#
+    }
+#>
+        }
+
+<#
+}
+#>
+
+
+
+<#
+foreach (var template in templates)
+{
+#>
+<#
+    foreach (var syncTemplate in template.SynchronizationTemplates)
+    {
+#>
+        public ISynchronizable <#= syncTemplate.Generator #>(<#= template.PredicateType #> willHandle,
+            HandledCallback begun = null, HandledCallback ended = null, AllNotifiedCallback allNotified = null)
+        {
+            return new <#= syncTemplate.Synchronizable #>(willHandle, begun, ended, allNotified);
+        }
+
+<#
+    }
+#>
+<#
+}
+#>
+    }
+}

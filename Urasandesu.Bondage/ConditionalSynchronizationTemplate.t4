@@ -1,0 +1,222 @@
+﻿<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#
+/* 
+ * File: ConditionalSynchronizationTemplate.t4
+ * 
+ * Author: Akira Sugiura (urasandesu@gmail.com)
+ * 
+ * 
+ * Copyright (c) 2017 Akira Sugiura
+ *  
+ *  This software is MIT License.
+ *  
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is
+ *  furnished to do so, subject to the following conditions:
+ *  
+ *  The above copyright notice and this permission notice shall be included in
+ *  all copies or substantial portions of the Software.
+ *  
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *  THE SOFTWARE.
+ */
+
+var templates = new[]
+{
+    new ConditionalSynchronizationTemplate("MachineCreated",       SynchronizationTypes.Set,                             "OnCreateMachine",        "Type", "type", "MachineId",          "machineId"),
+    new ConditionalSynchronizationTemplate("MonitorCreated",       SynchronizationTypes.Set,                             "OnCreateMonitor",        "Type", "type", "string",             "monitorTypeName", "MonitorId", "monitorId"),
+    new ConditionalSynchronizationTemplate("Default",              SynchronizationTypes.Set,                             "OnDefault",              "Type", "type", "MachineId",          "machineId",       "string",    "currentStateName"),
+    new ConditionalSynchronizationTemplate("Dequeued",             SynchronizationTypes.Set,                             "OnDequeue",              "Type", "type", "MachineId",          "machineId",       "string",    "currentStateName", "string",    "eventName"),
+    new ConditionalSynchronizationTemplate("Enqueued",             SynchronizationTypes.Set,                             "OnEnqueue",              "Type", "type", "MachineId",          "machineId",       "string",    "currentStateName", "string",    "eventName"),
+    new ConditionalSynchronizationTemplate("Error",                SynchronizationTypes.Set,                             "OnError",                "Type", "type", "string",             "text"),
+    new ConditionalSynchronizationTemplate("Halt",                 SynchronizationTypes.Set,                             "OnHalt",                 "Type", "type", "MachineId",          "machineId",       "int",       "inboxSize"),
+    new ConditionalSynchronizationTemplate("MachineAction",        SynchronizationTypes.Set,                             "OnMachineAction",        "Type", "type", "MachineId",          "machineId",       "string",    "currentStateName", "string",    "actionName"),
+    new ConditionalSynchronizationTemplate("MachineActionHandled", SynchronizationTypes.Set | SynchronizationTypes.Wait, "OnMachineActionHandled", "Type", "type", "MachineId",          "machineId",       "string",    "currentStateName", "string",    "actionName"),
+    new ConditionalSynchronizationTemplate("MachineEvent",         SynchronizationTypes.Set,                             "OnMachineEvent",         "Type", "type", "MachineId",          "machineId",       "string",    "currentStateName", "string",    "eventName"),
+    new ConditionalSynchronizationTemplate("MachineState",         SynchronizationTypes.Set,                             "OnMachineState",         "Type", "type", "MachineId",          "machineId",       "string",    "stateName",        "bool",      "isEntry"),
+    new ConditionalSynchronizationTemplate("MonitorAction",        SynchronizationTypes.Set,                             "OnMonitorAction",        "Type", "type", "string",             "monitorTypeName", "MonitorId", "monitorId",        "string",    "currentStateName", "string", "actionName"),
+    new ConditionalSynchronizationTemplate("MonitorActionHandled", SynchronizationTypes.Set | SynchronizationTypes.Wait, "OnMonitorActionHandled", "Type", "type", "string",             "monitorTypeName", "MonitorId", "monitorId",        "string",    "currentStateName", "string", "actionName"),
+    new ConditionalSynchronizationTemplate("MonitorEvent",         SynchronizationTypes.Set,                             "OnMonitorEvent",         "Type", "type", "string",             "monitorTypeName", "MonitorId", "monitorId",        "string",    "currentStateName", "string", "eventName",       "bool",   "isProcessing"),
+    new ConditionalSynchronizationTemplate("MonitorState",         SynchronizationTypes.Set,                             "OnMonitorState",         "Type", "type", "string",             "monitorTypeName", "MonitorId", "monitorId",        "string",    "stateName",        "bool",   "isEntry",         "bool?",  "isInHotState"),
+    new ConditionalSynchronizationTemplate("Popped",               SynchronizationTypes.Set,                             "OnPop",                  "Type", "type", "MachineId",          "machineId",       "string",    "currentStateName", "string",    "restoredStateName"),
+    new ConditionalSynchronizationTemplate("PopUnhandledEvent",    SynchronizationTypes.Set,                             "OnPopUnhandledEvent",    "Type", "type", "MachineId",          "machineId",       "string",    "currentStateName", "string",    "eventName"),
+    new ConditionalSynchronizationTemplate("Pushed",               SynchronizationTypes.Set,                             "OnPush",                 "Type", "type", "MachineId",          "machineId",       "string",    "currentStateName", "string",    "newStateName"),
+    new ConditionalSynchronizationTemplate("Random",               SynchronizationTypes.Set,                             "OnRandom",               "Type", "type", "MachineId",          "machineId",       "object",    "result"),
+    new ConditionalSynchronizationTemplate("Received",             SynchronizationTypes.Set,                             "OnReceive",              "Type", "type", "MachineId",          "machineId",       "string",    "currentStateName", "string",    "eventName",        "bool",   "wasBlocked"),
+    new ConditionalSynchronizationTemplate("Sent",                 SynchronizationTypes.Set,                             "OnSend",                 "Type", "type", "MachineId",          "targetMachineId", "string",    "targetStateName",  "MachineId", "senderId",         "string", "senderStateName", "string", "eventName", "Guid?", "operationGroupId", "bool", "isTargetHalted"),
+    new ConditionalSynchronizationTemplate("StrategyError",        SynchronizationTypes.Set,                             "OnStrategyError",        "Type", "type", "SchedulingStrategy", "strategy",        "string",    "strategyDescription"),
+    new ConditionalSynchronizationTemplate("Waited",               SynchronizationTypes.Set,                             "OnWait",                 "Type", "type", "MachineId",          "machineId",       "string",    "currentStateName", "string",    "eventNames"),
+};
+#>
+<#+
+[Flags]
+enum SynchronizationTypes
+{
+    Set = 1,
+    Wait = 2
+}
+
+class ConditionalSynchronizationTemplate
+{
+    public ConditionalSynchronizationTemplate(string @event, SynchronizationTypes type, string overrideMethod, params string[] paramPairs)
+    {
+        Event = @event;
+        var syncTemplates = new List<SynchronizationTemplate>();
+        if ((type & SynchronizationTypes.Set) == SynchronizationTypes.Set)
+            syncTemplates.Add(new SetTemplate(Event));
+        if ((type & SynchronizationTypes.Wait) == SynchronizationTypes.Wait)
+            syncTemplates.Add(new WaitTemplate(Event));
+        SynchronizationTemplates = syncTemplates.ToArray();
+        PredicateType = $"{ Event }Predicate";
+        HandlerType = $"{ Event }Handler";
+        OverrideMethod = overrideMethod;
+        var paramTemplates = new List<ParameterTemplate>();
+        for (var i = 0; i < paramPairs.Length; i += 2)
+        {
+            var paramTemplate = new ParameterTemplate(paramPairs[i], paramPairs[i + 1]);
+            if (paramTemplate.IsEmpty)
+                continue;
+
+            paramTemplates.Add(paramTemplate);
+        }
+        ParameterTemplates = paramTemplates.ToArray();
+    }
+
+    public string Event { get; }
+    public SynchronizationTemplate[] SynchronizationTemplates { get; }
+    public string PredicateType { get; }
+    public string HandlerType { get; }
+    public string OverrideMethod { get; }
+    public ParameterTemplate[] ParameterTemplates { get; }
+
+
+
+    public string GetTupleType()
+    {
+        var types = ParameterTemplates.Take(7).Select(_ => _.Type).Concat(new[] { GetTupleType(ParameterTemplates.Skip(7)) });
+        return GetTupleType(types);
+    }
+
+    static string GetTupleType(IEnumerable<string> types)
+    {
+        var genericArgs = string.Join(", ", types.Where(_ => !string.IsNullOrEmpty(_)));
+        return $"Tuple<{ genericArgs }>";
+    }
+
+    static string GetTupleType(IEnumerable<ParameterTemplate> paramTemplates)
+    {
+        if (!paramTemplates.Any())
+            return string.Empty;
+
+        var types = paramTemplates.Take(7).Select(_ => _.Type).Concat(new[] { GetTupleType(paramTemplates.Skip(7)) });
+        return GetTupleType(types);
+    }
+
+
+    public string GetTuplePropertyName(int index)
+    {
+        return index < 7 ? $"Item{ index + 1 }" : $"Rest.{ GetTuplePropertyName(index - 7) }";
+    }
+
+
+
+    public string GetHandlerInvocationParameters()
+    {
+        return string.Join(", ", ParameterTemplates.Skip(1).Select(_ => _.Name));
+    }
+
+
+
+    public string GetMethodParameterDefinitions()
+    {
+        return string.Join(", ", ParameterTemplates.Skip(1).Select(_ => $"{ _.Type } { _.Name }"));
+    }
+
+
+
+    public string GetMethodParameters()
+    {
+        return string.Join(", ", ParameterTemplates.Skip(1).Select(_ => _.Name));
+    }
+
+
+
+    public bool IsHandledHandler(ConditionalSynchronizationTemplate template)
+    {
+        return Event == $"{ template.Event }Handled";
+    }
+}
+
+abstract class SynchronizationTemplate
+{
+    public SynchronizationTemplate(string @event, SynchronizationTypes type)
+    {
+        Event = @event;
+        Type = type;
+    }
+
+    protected string Event { get; }
+    public SynchronizationTypes Type { get; }
+    public bool IsSet => Type == SynchronizationTypes.Set;
+    public bool Iswait => Type == SynchronizationTypes.Wait;
+    public abstract string Generator { get; }
+    public abstract string Synchronizable { get; }
+    public abstract string SynchronizableBaseType { get; }
+    public abstract string Synchronizer { get; }
+    public abstract string SynchronizerBaseType { get; }
+}
+
+class SetTemplate : SynchronizationTemplate
+{
+    public SetTemplate(string @event) :
+        base(@event, SynchronizationTypes.Set)
+    { }
+
+    public override string Generator => $"{ Event }Set";
+    public override string Synchronizable => $"{ Event }Settable";
+    public override string SynchronizableBaseType => "EventSettable";
+    public override string Synchronizer => $"{ Event }Setter";
+    public override string SynchronizerBaseType => "EventSetter";
+}
+
+class WaitTemplate : SynchronizationTemplate
+{
+    public WaitTemplate(string @event) :
+        base(@event, SynchronizationTypes.Wait)
+    { }
+
+    public override string Generator => $"{ Event }Wait";
+    public override string Synchronizable => $"{ Event }Waitable";
+    public override string SynchronizableBaseType => "EventWaitable";
+    public override string Synchronizer => $"{ Event }Waiter";
+    public override string SynchronizerBaseType => "EventWaiter";
+}
+
+class ParameterTemplate
+{
+    public ParameterTemplate(string type, string name)
+    {
+        Type = type;
+        Name = name;
+    }
+
+    public string Type { get; }
+    public string Name { get; }
+
+    public bool IsEmpty
+    {
+        get { return string.IsNullOrEmpty(Type) || string.IsNullOrEmpty(Name); }
+    }
+}
+#>

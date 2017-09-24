@@ -1,0 +1,3 @@
+[submodule "Enkidu"]
+	path = Enkidu
+	url = git@github.com:urasandesu/Enkidu.git
