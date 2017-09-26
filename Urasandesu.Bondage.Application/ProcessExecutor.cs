@@ -1,5 +1,5 @@
 ﻿/* 
- * File: IConditionalSynchronizable.cs
+ * File: ProcessExecutor.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,10 +29,18 @@
 
 
 
+using System.Diagnostics;
 
-namespace Urasandesu.Bondage
+namespace Urasandesu.Bondage.Application
 {
-    //public interface IConditionalSynchronizable : ISynchronizable
-    //{
-    //}
+    public class ProcessExecutor : IProcessExecutor
+    {
+        public void StartProcess(string fileName, string arguments)
+        {
+            var info = new ProcessStartInfo();
+            info.FileName = fileName;
+            info.Arguments = arguments;
+            Process.Start(info);
+        }
+    }
 }

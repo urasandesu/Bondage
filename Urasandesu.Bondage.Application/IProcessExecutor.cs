@@ -29,7 +29,8 @@
 
 
 
-namespace Urasandesu.Bondage
+
+namespace Urasandesu.Bondage.Application
 {
     public interface IProcessExecutor
     {

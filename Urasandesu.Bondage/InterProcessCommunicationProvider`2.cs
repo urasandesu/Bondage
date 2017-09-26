@@ -136,14 +136,10 @@ namespace Urasandesu.Bondage
             {
                 if (disposing)
                 {
-                    // Free any other managed objects here. 
-                    //
                     m_serviceHost?.Close();
-                    m_remoteNetworkProvider?.Dispose();
+                    m_remoteNetworkProvider.Dispose();
                 }
 
-                // Free any unmanaged objects here. 
-                //
                 m_disposed = true;
             }
         }

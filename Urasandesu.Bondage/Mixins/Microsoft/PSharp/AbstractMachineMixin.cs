@@ -36,11 +36,6 @@ namespace Urasandesu.Bondage.Mixins.Microsoft.PSharp
 {
     public static class AbstractMachineMixin
     {
-        public static string GetTransitionTypeName(Type transType)
-        {
-            return transType == null ? string.Empty : transType.FullName.Replace("+", ".");
-        }
-
         public static string GetStateName(Type state)
         {
             return state == null ? string.Empty : $"{ state.DeclaringType }.{ GetQualifiedStateName(state) }";

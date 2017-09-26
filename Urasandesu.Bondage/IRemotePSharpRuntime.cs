@@ -36,7 +36,7 @@ using Urasandesu.Bondage.Mixins.Microsoft.PSharp;
 namespace Urasandesu.Bondage
 {
     [ServiceContract(Namespace = "Urasandesu.Bondage")]
-    [ServiceKnownType("GetKnownTypes", typeof(PSharpTypesProvider))]
+    [ServiceKnownType(nameof(PSharpTypesProvider.GetKnownTypes), typeof(PSharpTypesProvider))]
     public interface IRemotePSharpRuntime
     {
         [OperationContract]

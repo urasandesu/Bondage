@@ -96,8 +96,6 @@ namespace Urasandesu.Bondage
 
         public Type RemoteNetworkProviderType => GetType();
 
-        bool m_disposed;
-
         public void Dispose()
         {
             Dispose(true);
@@ -105,19 +103,6 @@ namespace Urasandesu.Bondage
         }
 
         protected virtual void Dispose(bool disposing)
-        {
-            if (!m_disposed)
-            {
-                if (disposing)
-                {
-                    // Free any other managed objects here. 
-                    //
-                }
-
-                // Free any unmanaged objects here. 
-                //
-                m_disposed = true;
-            }
-        }
+        { }
     }
 }

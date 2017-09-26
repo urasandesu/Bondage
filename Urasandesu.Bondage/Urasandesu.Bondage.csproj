@@ -144,7 +144,6 @@
     <Compile Include="DistributedDictionary`2.cs" />
     <Compile Include="DistributedRegister`1.cs" />
     <Compile Include="HotAttribute.cs" />
-    <Compile Include="IConditionalSynchronizable.cs" />
     <Compile Include="InMemoryLogger.cs" />
     <Compile Include="Internals\ConditionalSynchronizableHelper.cs" />
     <Compile Include="Internals\Construct.cs" />
@@ -163,7 +162,6 @@
     <Compile Include="Internals\StateBuildInfo.cs" />
     <Compile Include="InterProcessCommunicationProvider`2.cs" />
     <Compile Include="InterProcessCommunicationSetting.cs" />
-    <Compile Include="IProcessExecutor.cs" />
     <Compile Include="IRemotePSharpRuntime.cs" />
     <Compile Include="Internals\MachineAndBundlerStorage`3.cs" />
     <Compile Include="Internals\MachineBuilder`3.cs" />
@@ -210,7 +208,6 @@
     <Compile Include="OnEnterInvokeAttribute.cs" />
     <Compile Include="OnEventInvokeAttribute.cs" />
     <Compile Include="OnEventTransitAttribute.cs" />
-    <Compile Include="ProcessExecutor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PSharpTypesProvider.cs" />
     <Compile Include="RemoteInterProcessNetworkProvider`1.cs" />

@@ -39,10 +39,6 @@ namespace Urasandesu.Bondage.Internals
 {
     abstract class SenderStorage<TSender> : SenderStorage
     {
-        static SenderStorage()
-        {
-        }
-
         protected override Type DefineSenderType(ModuleBuilder modBldr)
         {
             var parentType = SenderParentType;

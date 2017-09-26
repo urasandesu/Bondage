@@ -38,41 +38,6 @@ namespace Urasandesu.Bondage.Mixins.System
 {
     public static class StringMixin
     {
-        public static string ToCommandLineArgument(this string @this)
-        {
-            if (@this == null)
-                throw new ArgumentNullException(nameof(@this));
-
-            if (-1 < @this.IndexOfAny(new[] { '\"', ' ', '\t' }))
-                return new StringBuilder(@this).Replace("\"", "\\\"").Insert(0, "\"").Append("\"").ToString();
-            else
-                return @this;
-        }
-
-        public static string EncodeEnclosure(this string @this)
-        {
-            if (@this == null)
-                throw new ArgumentNullException(nameof(@this));
-
-            return @this.NullableEncodeEnclosure();
-        }
-
-        public static string NullableEncodeEnclosure(this string @this)
-        {
-            if (@this == null)
-                return null;
-
-            return new StringBuilder(@this).Replace("\"", "\\\"").ToString();
-        }
-
-        public static string ToNullVisibleString(this string @this)
-        {
-            if (@this == null)
-                return "null";
-
-            return new StringBuilder(@this).Insert(0, "\"").Append("\"").ToString();
-        }
-
         public static T FromJson<T>(this string json)
         {
             if (json == null)

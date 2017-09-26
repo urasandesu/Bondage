@@ -35,7 +35,7 @@ using Urasandesu.Bondage;
 namespace Test.Urasandesu.Bondage.ReferenceImplementations
 {
     [ServiceContract(Namespace = "Test.Urasandesu.Bondage.ReferenceImplementations")]
-    [ServiceKnownType("GetKnownTypes", typeof(DomainTypesProvider))]
+    [ServiceKnownType(nameof(DomainTypesProvider.GetKnownTypes), typeof(DomainTypesProvider))]
     public interface IRemoteDomainRuntime : IRemotePSharpRuntime
     {
     }

@@ -100,7 +100,7 @@ namespace Urasandesu.Bondage.Internals
                 foreach (var methodizedStateAttr in stateBuildInfo.MethodizedStateAttributes)
                     methodizedStateAttr.SetStateAttributeTo<TSender, TReceiver, TBundler>(stateBuildInfo, stateBuildInfos.Select(_ => _.CurrentStateBuilder));
 
-                var type = stateBuildInfo.CreateUserDefinedStartStateOrDefault();
+                var type = stateBuildInfo.CreateTypeAndGetUserDefinedStartState();
                 if (type != null)
                     userDefStartState = type;
             }

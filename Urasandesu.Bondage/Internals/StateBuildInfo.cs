@@ -49,7 +49,7 @@ namespace Urasandesu.Bondage.Internals
         public IEnumerable<MethodizedStateAttribute> MethodizedStateAttributes { get; }
         public TypeBuilder AutoDefinedStartStateBuilder { get; set; }
 
-        public Type CreateUserDefinedStartStateOrDefault()
+        public Type CreateTypeAndGetUserDefinedStartState()
         {
             if (AutoDefinedStartStateBuilder == null)
             {

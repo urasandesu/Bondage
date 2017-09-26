@@ -127,7 +127,7 @@ namespace Urasandesu.Bondage
 
 
 
-        public DistributedRegister<T> NewDistributedRegister<T>(T value = default(T)) where T : struct
+        public DistributedRegister<T> NewDistributedRegister<T>(T value = default) where T : struct
         {
             return New<DistributedRegister<T>>(value);
         }
@@ -162,7 +162,7 @@ namespace Urasandesu.Bondage
         internal static TSender GetSender<TSender>(CommunicationId target, MonitorId id) where TSender : class, IMethodizedMonitorSender
         {
             if (id == null)
-                return default(TSender);
+                return default;
 
             return MonitorSenderProperty<TSender>.Get(target, id);
         }
@@ -201,7 +201,7 @@ namespace Urasandesu.Bondage
         internal static TSender GetSender<TSender>(CommunicationId target, MachineId id) where TSender : class, IMethodizedMachineSender
         {
             if (id == null)
-                return default(TSender);
+                return default;
 
             return MachineSenderProperty<TSender>.Get(target, id);
         }

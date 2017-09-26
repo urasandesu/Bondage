@@ -81,13 +81,9 @@ namespace Urasandesu.Bondage.Application
 
             if (disposing)
             {
-                // Free any other managed objects here. 
-                //
                 Container?.Dispose();
             }
 
-            // Free any unmanaged objects here. 
-            //
             m_disposed = true;
         }
 

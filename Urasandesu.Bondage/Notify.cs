@@ -30,7 +30,7 @@
 
 
 using System.Runtime.Serialization;
-using Urasandesu.Bondage.Mixins.System;
+using Urasandesu.NAnonym.Mixins.System;
 
 namespace Urasandesu.Bondage
 {
