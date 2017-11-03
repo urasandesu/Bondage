@@ -41,8 +41,8 @@ namespace Urasandesu.Bondage.Internals
             Id = id;
         }
 
-        public RuntimeHost RuntimeHost { get; private set; }
+        public RuntimeHost RuntimeHost { get; }
 
-        public MonitorId Id { get; private set; }
+        public MonitorId Id { get; }
     }
 }

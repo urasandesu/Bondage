@@ -1,5 +1,5 @@
 ﻿/* 
- * File: MachineSenderStorage`1.cs
+ * File: MarshalByRefTestingEngine.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,21 +29,48 @@
 
 
 
-using Microsoft.PSharp;
+using Microsoft.PSharp.TestingServices;
 using System;
-using System.Reflection;
 
-namespace Urasandesu.Bondage.Internals
+namespace Urasandesu.Bondage.Mixins.Microsoft.PSharp.TestingServices
 {
-    class MachineSenderStorage<TSender> : SenderStorage<TSender>
-        where TSender : class, IMethodizedMachineSender
+    class MarshalByRefTestingEngine : MarshalByRefObject, ITestingEngine
     {
-        protected override Type SenderParentType => typeof(MethodizedMachineSender);
+        readonly ITestingEngine m_engine;
 
-        protected override Type TransitionIdType => typeof(MachineId);
+        public MarshalByRefTestingEngine(ITestingEngine engine)
+        {
+            m_engine = engine;
+        }
 
-        protected override Type SenderTypeBase => typeof(IMethodizedMachineSender);
+        public TestReport TestReport => m_engine.TestReport;
 
-        protected override MethodInfo SendEventMethod => typeof(RuntimeHost).GetMethod("SendEvent");
+        public IRegisterRuntimeOperation Reporter => m_engine.Reporter;
+
+        public ITestingEngine Run()
+        {
+            m_engine.Run();
+            return this;
+        }
+
+        public void Stop()
+        {
+            m_engine.Stop();
+        }
+
+        public void TryEmitTraces(string directory, string file)
+        {
+            m_engine.TryEmitTraces(directory, file);
+        }
+
+        public void RegisterPerIterationCallBack(Action<int> callback)
+        {
+            m_engine.RegisterPerIterationCallBack(callback);
+        }
+
+        public string Report()
+        {
+            return m_engine.Report();
+        }
     }
 }

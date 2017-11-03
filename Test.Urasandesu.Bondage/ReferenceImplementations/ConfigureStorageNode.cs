@@ -41,7 +41,7 @@ namespace Test.Urasandesu.Bondage.ReferenceImplementations
             SafetyMonitor = safetyMonitor;
         }
 
-        public MessageCollection Messages { get; private set; }
-        public ISafetyMonitorSender SafetyMonitor { get; private set; }
+        public MessageCollection Messages { get; }
+        public ISafetyMonitorSender SafetyMonitor { get; }
     }
 }

@@ -1,5 +1,5 @@
 ﻿/* 
- * File: TransitionAndBundlerStorage`3.cs
+ * File: TransitionAndBundlerTypeBuilder`3.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -39,13 +39,13 @@ using Urasandesu.NAnonym.Mixins.System;
 
 namespace Urasandesu.Bondage.Internals
 {
-    abstract class TransitionAndBundlerStorage<TSender, TBundler, TReceiver>
+    abstract class TransitionAndBundlerTypeBuilder<TSender, TBundler, TReceiver>
     {
-        protected abstract SenderStorage<TSender> SenderStorage { get; }
+        protected abstract SenderTypeBuilder<TSender> SenderTypeBuilder { get; }
 
         public (Type transType, Type bundlerType, Type userDefStartState) DefineTransitionAndBundlerType()
         {
-            var modBldr = SenderStorage.DefineTemporaryModuleBuilder();
+            var modBldr = SenderTypeBuilder.DefineTemporaryModuleBuilder();
             var receiverType = GetReceiverType();
             (var transType, var userDefStartState) = DefineTransitionType(modBldr, receiverType);
             var bundlerType = DefineBundlerType(modBldr, receiverType, transType);
@@ -120,7 +120,7 @@ namespace Urasandesu.Bondage.Internals
             var receiverMethods = receiverType.GetMethods();
             foreach (var receiverMethod in receiverMethods)
             {
-                var eventType = SenderStorage.GetMethodizedEventType(receiverMethod);
+                var eventType = SenderTypeBuilder.GetMethodizedEventType(receiverMethod);
 
                 var name = receiverMethod.Name;
                 var methAttr = MethodAttributes.Private | MethodAttributes.HideBySig;
@@ -155,7 +155,7 @@ namespace Urasandesu.Bondage.Internals
             var bundlerBldr = modBldr.DefineType(name, typeAttr, parentType, interfaceTypes);
 
             DefineBundlerConstructor(bundlerBldr, receiverType, parentType);
-            SenderStorage.DefineSenderSenderMethods(bundlerBldr, parentType);
+            SenderTypeBuilder.DefineSenderSenderMethods(bundlerBldr, parentType);
             DefineBundlerReceiverMethods(bundlerBldr, receiverType, parentType);
             DefineBundlerStateMethods(bundlerBldr, transType, parentType);
             DefineBundlerImmediateSenderMethods(bundlerBldr, transType, parentType);
@@ -189,7 +189,7 @@ namespace Urasandesu.Bondage.Internals
             var receiverMethods = receiverType.GetMethods();
             foreach (var receiverMethod in receiverMethods)
             {
-                var eventType = SenderStorage.GetMethodizedEventType(receiverMethod);
+                var eventType = SenderTypeBuilder.GetMethodizedEventType(receiverMethod);
 
                 var name = receiverMethod.Name;
                 var methAttr = MethodAttributes.Public | MethodAttributes.Final | MethodAttributes.HideBySig | MethodAttributes.NewSlot | MethodAttributes.Virtual;
@@ -250,7 +250,7 @@ namespace Urasandesu.Bondage.Internals
             foreach (var immediateSenderMethod in immediateSenderMethods)
             {
                 var eventType = default(Type);
-                if (!SenderStorage.IsMethodizedEvent(immediateSenderMethod, out eventType))
+                if (!SenderTypeBuilder.IsMethodizedEvent(immediateSenderMethod, out eventType))
                     continue;
 
                 var name = immediateSenderMethod.Name;

@@ -57,7 +57,7 @@ namespace Urasandesu.Bondage.Mixins.Microsoft.PSharp
             }
         }
 
-        internal MonitorId(PSharpRuntime runtime, Type type)
+        public MonitorId(PSharpRuntime runtime, Type type)
         {
             Endpoint = runtime.NetworkProvider.GetLocalEndpoint();
             AssemblyQualifiedName = type.AssemblyQualifiedName;

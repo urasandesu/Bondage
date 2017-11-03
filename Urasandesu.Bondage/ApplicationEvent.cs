@@ -31,15 +31,12 @@
 
 using Microsoft.PSharp;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Urasandesu.Bondage.Mixins.Microsoft.PSharp;
-using ST = System.Threading;
 
 namespace Urasandesu.Bondage
 {
-    [SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable", Justification = "EventWaitHandle resource can be collected by garbage collector.")]
     [DataContract]
     public abstract class ApplicationEvent : Event
     {
@@ -60,13 +57,9 @@ namespace Urasandesu.Bondage
 
 
 
-        ST::AutoResetEvent m_autoResetEvent;
-
         protected ApplicationEvent()
         {
             Id = new EventId();
-            m_autoResetEvent = new ST::AutoResetEvent(false);
-            RuntimeHost.RegisterCommunication(Id, new Func<object[], object>[] { SignalCore, WaitToSignalCore });
         }
 
         [OnDeserialized]
@@ -74,8 +67,6 @@ namespace Urasandesu.Bondage
         {
             var ctor = typeof(Event).GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, Type.EmptyTypes, null);
             ctor.Invoke(this, null);
-            m_autoResetEvent = new ST::AutoResetEvent(false);
-            RuntimeHost.RegisterCommunication(Id, new Func<object[], object>[] { SignalCore, WaitToSignalCore });
             OnDeserializedCore(ctx);
         }
 
@@ -128,65 +119,6 @@ namespace Urasandesu.Bondage
         }
 
 
-
-        public bool Signal()
-        {
-            return (bool)RuntimeHost.DoCommunication(Id, SignalCore);
-        }
-
-        internal object SignalCore(params object[] args)
-        {
-            return m_autoResetEvent.Set();
-        }
-
-
-
-        public virtual bool WaitToSignal(int millisecondsTimeout, bool exitContext)
-        {
-            return (bool)RuntimeHost.DoCommunication(Id, WaitToSignalCore, millisecondsTimeout, exitContext);
-        }
-
-        public virtual bool WaitToSignal(TimeSpan timeout)
-        {
-            return (bool)RuntimeHost.DoCommunication(Id, WaitToSignalCore, timeout);
-        }
-
-        public virtual bool WaitToSignal(int millisecondsTimeout)
-        {
-            return (bool)RuntimeHost.DoCommunication(Id, WaitToSignalCore, millisecondsTimeout);
-        }
-
-        public virtual bool WaitToSignal(TimeSpan timeout, bool exitContext)
-        {
-            return (bool)RuntimeHost.DoCommunication(Id, WaitToSignalCore, timeout, exitContext);
-        }
-
-        public virtual bool WaitToSignal()
-        {
-            return (bool)RuntimeHost.DoCommunication(Id, WaitToSignalCore);
-        }
-
-        internal object WaitToSignalCore(params object[] args)
-        {
-            if (args == null || args.Length == 0)
-                return m_autoResetEvent.WaitOne();
-            else if (args.Length == 1)
-                if (args[0] is TimeSpan timeout)
-                    return m_autoResetEvent.WaitOne(timeout);
-                else if (args[0] is int millisecondsTimeout)
-                    return m_autoResetEvent.WaitOne(millisecondsTimeout);
-                else
-                    throw new NotSupportedException();
-            else if (args.Length == 2)
-                if (args[0] is int millisecondsTimeout && args[1] is bool exitContext1)
-                    return m_autoResetEvent.WaitOne(millisecondsTimeout, exitContext1);
-                else if (args[0] is TimeSpan timeout && args[1] is bool exitContext2)
-                    return m_autoResetEvent.WaitOne(timeout, exitContext2);
-                else
-                    throw new NotSupportedException();
-            else
-                throw new NotSupportedException();
-        }
 
         public override string ToString()
         {

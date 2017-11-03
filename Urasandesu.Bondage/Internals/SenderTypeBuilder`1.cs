@@ -1,5 +1,5 @@
 ﻿/* 
- * File: SenderStorage`1.cs
+ * File: SenderTypeBuilder`1.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -37,7 +37,7 @@ using Urasandesu.NAnonym.Mixins.System;
 
 namespace Urasandesu.Bondage.Internals
 {
-    abstract class SenderStorage<TSender> : SenderStorage
+    abstract class SenderTypeBuilder<TSender> : SenderTypeBuilder
     {
         protected override Type DefineSenderType(ModuleBuilder modBldr)
         {

@@ -29,7 +29,6 @@
 
 
 
-using Microsoft.Practices.Unity;
 using Microsoft.PSharp;
 using System;
 using Urasandesu.Bondage.Mixins.Microsoft.PSharp;
@@ -52,27 +51,12 @@ namespace Urasandesu.Bondage.Internals
                 throw new InvalidOperationException(msg);
         }
 
-        internal override object BuildUp(Type t, object existing, params ResolverOverride[] resolverOverrides)
-        {
-            throw new NotSupportedException();
-        }
-
         public override TSender New<TSender, TBundler, TReceiver>(MonitorInterface<TSender, TBundler, TReceiver> @interface)
         {
             throw new NotSupportedException();
         }
 
-        internal override MonitorId NewMonitor(Type type, Event e = null)
-        {
-            throw new NotSupportedException();
-        }
-
         public override TSender New<TSender, TBundler, TReceiver>(MachineInterface<TSender, TBundler, TReceiver> @interface)
-        {
-            throw new NotSupportedException();
-        }
-
-        internal override MachineId NewMachine(Type type, Event e = null)
         {
             throw new NotSupportedException();
         }

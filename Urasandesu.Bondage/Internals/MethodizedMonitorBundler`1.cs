@@ -48,8 +48,8 @@ namespace Urasandesu.Bondage.Internals
             Receiver = receiver;
         }
 
-        public RuntimeHost RuntimeHost { get; private set; }
-        public TReceiver Receiver { get; private set; }
+        public RuntimeHost RuntimeHost { get; }
+        public TReceiver Receiver { get; }
 
         public IUnityContainer Container { get; private set; }
 
@@ -60,7 +60,7 @@ namespace Urasandesu.Bondage.Internals
             Container.BuildUp(Receiver.GetType(), Receiver);
         }
 
-        public MonitorId Id { get; private set; }
+        public MonitorId Id { get; }
         public Func<ILogger> LoggerGet { get; set; }
         public ILogger Logger { get => LoggerGet(); }
         public Func<string> Name { get; set; }

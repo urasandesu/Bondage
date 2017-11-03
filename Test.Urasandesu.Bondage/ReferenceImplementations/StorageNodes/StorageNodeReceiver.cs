@@ -34,7 +34,7 @@ using Urasandesu.Bondage;
 
 namespace Test.Urasandesu.Bondage.ReferenceImplementations.StorageNodes
 {
-    class StorageNodeReceiver : MethodizedMachineReceiver<IStorageNodeBundler>, IStorageNodeReceiver
+    public class StorageNodeReceiver : MethodizedMachineReceiver<IStorageNodeBundler>, IStorageNodeReceiver
     {
         MessageCollection m_messages;
         ISafetyMonitorSender m_safetyMonitor;
@@ -58,7 +58,7 @@ namespace Test.Urasandesu.Bondage.ReferenceImplementations.StorageNodes
         {
             var log = DateTime.Now.Ticks;
             var data = e.Data;
-            m_safetyMonitor.LogUpdated(new LogUpdated(Id, log));
+            m_safetyMonitor.LogUpdated(new LogUpdated(Self, log));
             lock (m_messages)
                 m_messages.Add(new Message<ReplReq>() { Id = Id, Event = e, Value = $"storage node: { Id }, data: { data }, log: { log }" });
             m_log = log;

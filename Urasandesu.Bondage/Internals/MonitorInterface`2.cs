@@ -36,10 +36,10 @@ namespace Urasandesu.Bondage.Internals
         where TSender : class, IMethodizedMonitorSender
         where TBundler : class, IMethodizedMonitorSender, IMethodizedMonitorReceiver, IMethodizedMonitorStatus
     {
-        public MonitorInterface<TSender, TBundler, TReceiver> Receiver<TReceiver>(TReceiver receiver)
+        public MonitorInterface<TSender, TBundler, TReceiver> Receiver<TReceiver>()
             where TReceiver : MethodizedMonitorReceiver<TBundler>, IMethodizedMonitorReceiver
         {
-            return new MonitorInterface<TSender, TBundler, TReceiver>(receiver);
+            return new MonitorInterface<TSender, TBundler, TReceiver>();
         }
     }
 }

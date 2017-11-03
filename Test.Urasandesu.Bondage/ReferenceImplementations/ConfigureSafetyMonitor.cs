@@ -35,7 +35,7 @@ namespace Test.Urasandesu.Bondage.ReferenceImplementations
 {
     public class ConfigureSafetyMonitor : ApplicationEvent
     {
-        public MessageCollection Messages { get; private set; }
+        public MessageCollection Messages { get; }
 
         public ConfigureSafetyMonitor(MessageCollection messages)
         {

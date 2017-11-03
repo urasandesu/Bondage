@@ -40,7 +40,7 @@ namespace Urasandesu.Bondage
     public delegate bool MonitorCreatedPredicate(string monitorTypeName, MonitorId monitorId);
     public delegate bool DefaultPredicate(MachineId machineId, string currentStateName);
     public delegate bool DequeuedPredicate(MachineId machineId, string currentStateName, string eventName);
-    public delegate bool EnqueuedPredicate(MachineId machineId, string currentStateName, string eventName);
+    public delegate bool EnqueuedPredicate(MachineId machineId, string eventName);
     public delegate bool ErrorPredicate(string text);
     public delegate bool HaltPredicate(MachineId machineId, int inboxSize);
     public delegate bool MachineActionPredicate(MachineId machineId, string currentStateName, string actionName);
@@ -56,7 +56,7 @@ namespace Urasandesu.Bondage
     public delegate bool PushedPredicate(MachineId machineId, string currentStateName, string newStateName);
     public delegate bool RandomPredicate(MachineId machineId, object result);
     public delegate bool ReceivedPredicate(MachineId machineId, string currentStateName, string eventName, bool wasBlocked);
-    public delegate bool SentPredicate(MachineId targetMachineId, string targetStateName, MachineId senderId, string senderStateName, string eventName, Guid? operationGroupId, bool isTargetHalted);
+    public delegate bool SentPredicate(MachineId targetMachineId, MachineId senderId, string senderStateName, string eventName, Guid? operationGroupId, bool isTargetHalted);
     public delegate bool StrategyErrorPredicate(SchedulingStrategy strategy, string strategyDescription);
     public delegate bool WaitedPredicate(MachineId machineId, string currentStateName, string eventNames);
 }

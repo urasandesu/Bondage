@@ -30,6 +30,7 @@
 
 
 
+
 namespace Urasandesu.Bondage.Internals
 {
     public class MonitorInterface<TSender, TBundler, TReceiver>
@@ -37,11 +38,7 @@ namespace Urasandesu.Bondage.Internals
         where TBundler : class, IMethodizedMonitorSender, IMethodizedMonitorReceiver, IMethodizedMonitorStatus
         where TReceiver : MethodizedMonitorReceiver<TBundler>, IMethodizedMonitorReceiver
     {
-        internal MonitorInterface(TReceiver receiver)
-        {
-            Receiver = receiver;
-        }
-
-        public TReceiver Receiver { get; private set; }
+        internal MonitorInterface()
+        { }
     }
 }

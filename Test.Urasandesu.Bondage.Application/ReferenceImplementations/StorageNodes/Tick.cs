@@ -1,5 +1,5 @@
 ﻿/* 
- * File: MonitorSenderStorage`1.cs
+ * File: Tick.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,21 +29,11 @@
 
 
 
-using System;
-using System.Reflection;
-using Urasandesu.Bondage.Mixins.Microsoft.PSharp;
+using Urasandesu.Bondage;
 
-namespace Urasandesu.Bondage.Internals
+namespace Test.Urasandesu.Bondage.Application.ReferenceImplementations.StorageNodes
 {
-    class MonitorSenderStorage<TSender> : SenderStorage<TSender>
-        where TSender : class, IMethodizedMonitorSender
+    public class Tick : ApplicationEvent
     {
-        protected override Type SenderParentType => typeof(MethodizedMonitorSender);
-
-        protected override Type TransitionIdType => typeof(MonitorId);
-
-        protected override Type SenderTypeBase => typeof(IMethodizedMonitorSender);
-
-        protected override MethodInfo SendEventMethod => typeof(RuntimeHost).GetMethod("InvokeMonitor");
     }
 }

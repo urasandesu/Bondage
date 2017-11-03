@@ -35,8 +35,8 @@ namespace Test.Urasandesu.Bondage.ReferenceImplementations
 {
     public class ConfigureClient : ApplicationEvent
     {
-        public MessageCollection Messages { get; private set; }
-        public IServerSender Server { get; private set; }
+        public MessageCollection Messages { get; }
+        public IServerSender Server { get; }
 
         public ConfigureClient(MessageCollection messages, IServerSender server)
         {

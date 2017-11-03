@@ -42,8 +42,8 @@ namespace Test.Urasandesu.Bondage.ReferenceImplementations
             LivenessMonitor = livenessMonitor;
         }
 
-        public MessageCollection Messages { get; private set; }
-        public ISafetyMonitorSender SafetyMonitor { get; private set; }
-        public ILivenessMonitorSender LivenessMonitor { get; private set; }
+        public MessageCollection Messages { get; }
+        public ISafetyMonitorSender SafetyMonitor { get; }
+        public ILivenessMonitorSender LivenessMonitor { get; }
     }
 }

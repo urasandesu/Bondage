@@ -36,7 +36,7 @@ namespace Urasandesu.Bondage.Internals
 {
     static class RuntimeHostReferences
     {
-        static readonly WeakReferenceTable<RuntimeHostId, RuntimeHost> ms_runtimeHosts = new WeakReferenceTable<RuntimeHostId, RuntimeHost>();
+        static readonly WeakReferenceKeyValueTable<RuntimeHostId, RuntimeHost> ms_runtimeHosts = new WeakReferenceKeyValueTable<RuntimeHostId, RuntimeHost>();
 
         public static void Register(RuntimeHost runtimeHost)
         {

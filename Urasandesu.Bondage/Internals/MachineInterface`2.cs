@@ -39,10 +39,10 @@ namespace Urasandesu.Bondage.Internals
         internal MachineInterface()
         { }
 
-        public MachineInterface<TSender, TBundler, TReceiver> Receiver<TReceiver>(TReceiver receiver)
+        public MachineInterface<TSender, TBundler, TReceiver> Receiver<TReceiver>()
             where TReceiver : MethodizedMachineReceiver<TBundler>, IMethodizedMachineReceiver
         {
-            return new MachineInterface<TSender, TBundler, TReceiver>(receiver);
+            return new MachineInterface<TSender, TBundler, TReceiver>();
         }
     }
 }

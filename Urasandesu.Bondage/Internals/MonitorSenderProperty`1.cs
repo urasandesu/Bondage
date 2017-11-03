@@ -38,8 +38,8 @@ namespace Urasandesu.Bondage.Internals
     class MonitorSenderProperty<TSender>
         where TSender : class, IMethodizedMonitorSender
     {
-        readonly static WeakReferenceTable<MonitorId, TSender> ms_senders = new WeakReferenceTable<MonitorId, TSender>();
-        readonly static SenderStorage<TSender> ms_senderStorage = new MonitorSenderStorage<TSender>();
+        readonly static WeakReferenceKeyValueTable<MonitorId, TSender> ms_senders = new WeakReferenceKeyValueTable<MonitorId, TSender>();
+        readonly static SenderTypeBuilder<TSender> ms_senderStorage = new MonitorSenderTypeBuilder<TSender>();
         readonly static Lazy<Type> ms_senderType = new Lazy<Type>(() => ms_senderStorage.DefineSenderType());
         public static TSender Get(CommunicationId key, MonitorId id)
         {

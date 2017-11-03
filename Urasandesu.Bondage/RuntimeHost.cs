@@ -31,6 +31,7 @@
 
 using Microsoft.Practices.Unity;
 using Microsoft.PSharp;
+using Microsoft.PSharp.IO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,7 +43,7 @@ using Urasandesu.Bondage.Mixins.Microsoft.PSharp.Net;
 
 namespace Urasandesu.Bondage
 {
-    public class RuntimeHost
+    public class RuntimeHost : IDisposable
     {
         protected RuntimeHost()
         { }
@@ -58,17 +59,10 @@ namespace Urasandesu.Bondage
 
 
 
-        public RuntimeHostId Id { get; private set; }
+        public RuntimeHostId Id { get; }
 
-        public IUnityContainer Container { get; private set; }
-        public PSharpRuntime Runtime { get; private set; }
-
-
-
-        internal virtual object BuildUp(Type t, object existing, params ResolverOverride[] resolverOverrides)
-        {
-            return Container.BuildUp(t, existing, resolverOverrides);
-        }
+        public IUnityContainer Container { get; }
+        public PSharpRuntime Runtime { get; }
 
 
 
@@ -77,12 +71,28 @@ namespace Urasandesu.Bondage
             where TBundler : class, IMethodizedMonitorSender, IMethodizedMonitorReceiver, IMethodizedMonitorStatus
             where TReceiver : MethodizedMonitorReceiver<TBundler>, IMethodizedMonitorReceiver
         {
-            return MonitorBuilder<TSender, TBundler, TReceiver>.New(this, @interface);
+            return MonitorStorage<TSender, TBundler, TReceiver>.Get(this, @interface);
         }
 
-        internal virtual MonitorId NewMonitor(Type type, Event e = null)
+        internal TSender GetMonitorSender<TSender, TBundler, TReceiver>(MonitorInterface<TSender, TBundler, TReceiver> @interface, Type transType, Type bundlerType, Type userDefStartState)
+            where TSender : class, IMethodizedMonitorSender
+            where TBundler : class, IMethodizedMonitorSender, IMethodizedMonitorReceiver, IMethodizedMonitorStatus
+            where TReceiver : MethodizedMonitorReceiver<TBundler>, IMethodizedMonitorReceiver
         {
-            return Runtime.NewMonitor(type, e);
+            var receiver = Container.Resolve<TReceiver>();
+            var id = Runtime.NewMonitor(transType);
+            var registeredMonitors = Runtime.GetRegisteredMonitors();
+            return (TBundler)registeredMonitors.AddOrUpdate(id, _ => default, (_, oldBundler) =>
+            {
+                if (oldBundler != null)
+                    return oldBundler;
+
+                var bundler = (TBundler)Activator.CreateInstance(bundlerType, this, id, receiver);
+                receiver.Self = bundler;
+                Container.BuildUp(bundler.GetType(), bundler);
+                InvokeMonitor(id, new Construct(bundler, userDefStartState));
+                return bundler;
+            }) as TSender;
         }
 
 
@@ -92,12 +102,22 @@ namespace Urasandesu.Bondage
             where TBundler : class, IMethodizedMachineSender, IMethodizedMachineReceiver, IMethodizedMachineStatus
             where TReceiver : MethodizedMachineReceiver<TBundler>, IMethodizedMachineReceiver
         {
-            return MachineBuilder<TSender, TBundler, TReceiver>.New(this, @interface);
+            return MachineStorage<TSender, TBundler, TReceiver>.Get(this, @interface);
         }
 
-        internal virtual MachineId NewMachine(Type type, Event e = null)
+
+        internal TSender GetMachineSender<TSender, TBundler, TReceiver>(MachineInterface<TSender, TBundler, TReceiver> @interface, Type transType, Type bundlerType, Type userDefStartState)
+            where TSender : class, IMethodizedMachineSender
+            where TBundler : class, IMethodizedMachineSender, IMethodizedMachineReceiver, IMethodizedMachineStatus
+            where TReceiver : MethodizedMachineReceiver<TBundler>, IMethodizedMachineReceiver
         {
-            return Runtime.NewMachine(type, e);
+            var receiver = Container.Resolve<TReceiver>();
+            var id = Runtime.NewMachine(transType);
+            var bundler = (TBundler)Activator.CreateInstance(bundlerType, this, id, receiver);
+            receiver.Self = bundler;
+            Container.BuildUp(bundler.GetType(), bundler);
+            SendEvent(id, new Construct(bundler, userDefStartState));
+            return bundler as TSender;
         }
 
 
@@ -149,6 +169,8 @@ namespace Urasandesu.Bondage
 
 
 
+        public virtual ILogger Logger { get => Runtime.Logger; }
+        public virtual IPublishableLogger PublishableLogger { get => Runtime.Logger as IPublishableLogger; }
         public virtual void SetLogger(IPublishableLogger logger)
         {
             if (Runtime.Logger is IPublishableLogger publishableLogger)
@@ -283,7 +305,7 @@ namespace Urasandesu.Bondage
 
 
 
-        static readonly WeakReferenceTable<CommunicationId, Dictionary<string, Func<object[], object>>> ms_communicationTable = new WeakReferenceTable<CommunicationId, Dictionary<string, Func<object[], object>>>();
+        static readonly WeakReferenceKeyTable<CommunicationId, Dictionary<string, Func<object[], object>>> ms_communicationTable = new WeakReferenceKeyTable<CommunicationId, Dictionary<string, Func<object[], object>>>();
 
         public static void RegisterCommunication(CommunicationId target, Func<object[], object>[] actions)
         {
@@ -337,6 +359,41 @@ namespace Urasandesu.Bondage
         public virtual bool IsLocalEndpoint(string endpoint)
         {
             return Runtime.NetworkProvider.GetLocalEndpoint() == endpoint;
+        }
+
+
+
+        bool m_disposed;
+        bool m_isProcessingDispose;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (m_isProcessingDispose)
+                return;
+
+            try
+            {
+                m_isProcessingDispose = true;
+                if (!m_disposed)
+                {
+                    if (disposing)
+                    {
+                        Container.Dispose();
+                        // PSharpRuntime should not dispose of here because it will handle in the runtime host of P#.
+                    }
+
+                    m_disposed = true;
+                }
+            }
+            finally
+            {
+                m_isProcessingDispose = false;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
         }
     }
 }

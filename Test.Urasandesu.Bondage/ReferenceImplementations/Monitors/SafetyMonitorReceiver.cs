@@ -36,7 +36,7 @@ using Urasandesu.Bondage;
 
 namespace Test.Urasandesu.Bondage.ReferenceImplementations.Monitors
 {
-    class SafetyMonitorReceiver : MethodizedMonitorReceiver<ISafetyMonitorBundler>, ISafetyMonitorReceiver
+    public class SafetyMonitorReceiver : MethodizedMonitorReceiver<ISafetyMonitorBundler>, ISafetyMonitorReceiver
     {
         MessageCollection m_messages;
         Dictionary<MachineId, bool> m_replicas;
@@ -49,20 +49,20 @@ namespace Test.Urasandesu.Bondage.ReferenceImplementations.Monitors
 
         public void HandleHandshake(HandshakeSafetyMonitor e)
         {
-            var snIds = e.StorageNodeIds;
+            var storageNodes = e.StorageNodes;
             m_replicas = new Dictionary<MachineId, bool>();
-            foreach (var snId in snIds)
-                m_replicas.Add(snId, false);
+            foreach (var storageNode in storageNodes)
+                m_replicas.Add(storageNode.Id, false);
             Self.Checking();
         }
 
         public void HandleLogUpdated(LogUpdated e)
         {
-            var snId = e.StorageNodeId;
+            var storageNode = e.StorageNode;
             var log = e.Log;
-            m_replicas[snId] = true;
+            m_replicas[storageNode.Id] = true;
             lock (m_messages)
-                m_messages.Add(new Message<LogUpdated>() { Id = Id, Event = e, Value = $"storage node: { snId }, log: { log }" });
+                m_messages.Add(new Message<LogUpdated>() { Id = Id, Event = e, Value = $"storage node: { storageNode.Id }, log: { log }" });
         }
 
         public void HandleAck(Ack e)

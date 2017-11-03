@@ -39,11 +39,16 @@ namespace Test.Urasandesu.Bondage.ReferenceImplementations
     public class HandshakeSafetyMonitor : ApplicationEvent
     {
         [DataMember]
-        public MachineId[] StorageNodeIds { get; private set; }
-
-        public HandshakeSafetyMonitor(MachineId[] storageNodeIds)
+        MachineId[] m_storageNodeIds;
+        public IStorageNodeSender[] StorageNodes
         {
-            StorageNodeIds = storageNodeIds;
+            get => GetSender<IStorageNodeSender>(m_storageNodeIds);
+            set => SetSender(ref m_storageNodeIds, value);
+        }
+
+        public HandshakeSafetyMonitor(IStorageNodeSender[] storageNodes)
+        {
+            StorageNodes = storageNodes;
         }
     }
 }

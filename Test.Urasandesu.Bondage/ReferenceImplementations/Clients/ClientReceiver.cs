@@ -33,7 +33,7 @@ using Urasandesu.Bondage;
 
 namespace Test.Urasandesu.Bondage.ReferenceImplementations.Clients
 {
-    class ClientReceiver : MethodizedMachineReceiver<IClientBundler>, IClientReceiver
+    public class ClientReceiver : MethodizedMachineReceiver<IClientBundler>, IClientReceiver
     {
         MessageCollection m_messages;
         IServerSender m_server;
@@ -55,16 +55,16 @@ namespace Test.Urasandesu.Bondage.ReferenceImplementations.Clients
 
         public virtual void EnterExit()
         {
-            if (Random())
-            {
+            //if (Random())
+            //{
                 lock (m_messages)
                     m_messages.Add(new Message<Ack>() { Id = Id, Event = new Ack(), Value = $"halt client: { Id }" });
                 Halt();
-            }
-            else
-            {
-                Self.ReturnActiveImmediately(new ReturnActive());
-            }
+            //}
+            //else
+            //{
+            //    Self.ReturnActiveImmediately(new ReturnActive());
+            //}
         }
     }
 }

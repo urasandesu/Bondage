@@ -46,7 +46,7 @@ namespace Urasandesu.Bondage
             Events = events ?? throw new ArgumentNullException(nameof(events));
         }
 
-        public IReadOnlyCollection<string> Events { get; private set; }
+        public IReadOnlyCollection<string> Events { get; }
 
         internal override void SetStateAttributeTo<TSender, TReceiver, TBundler>(StateBuildInfo stateBuildInfo, IEnumerable<TypeBuilder> allStateBldrs)
         {

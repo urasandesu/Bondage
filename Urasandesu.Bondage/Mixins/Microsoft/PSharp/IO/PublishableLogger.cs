@@ -95,10 +95,10 @@ namespace Urasandesu.Bondage.Mixins.Microsoft.PSharp.IO
             base.OnDequeue(machineId, currentStateName, eventName);
             Dequeued?.Invoke(machineId, currentStateName, eventName);
         }
-        public override void OnEnqueue(MachineId machineId, string currentStateName, string eventName)
+        public override void OnEnqueue(MachineId machineId, string eventName)
         {
-            base.OnEnqueue(machineId, currentStateName, eventName);
-            Enqueued?.Invoke(machineId, currentStateName, eventName);
+            base.OnEnqueue(machineId, eventName);
+            Enqueued?.Invoke(machineId, eventName);
         }
         public override void OnError(string text)
         {
@@ -195,10 +195,10 @@ namespace Urasandesu.Bondage.Mixins.Microsoft.PSharp.IO
             base.OnReceive(machineId, currentStateName, eventName, wasBlocked);
             Received?.Invoke(machineId, currentStateName, eventName, wasBlocked);
         }
-        public override void OnSend(MachineId targetMachineId, string targetStateName, MachineId senderId, string senderStateName, string eventName, Guid? operationGroupId, bool isTargetHalted)
+        public override void OnSend(MachineId targetMachineId, MachineId senderId, string senderStateName, string eventName, Guid? operationGroupId, bool isTargetHalted)
         {
-            base.OnSend(targetMachineId, targetStateName, senderId, senderStateName, eventName, operationGroupId, isTargetHalted);
-            Sent?.Invoke(targetMachineId, targetStateName, senderId, senderStateName, eventName, operationGroupId, isTargetHalted);
+            base.OnSend(targetMachineId, senderId, senderStateName, eventName, operationGroupId, isTargetHalted);
+            Sent?.Invoke(targetMachineId, senderId, senderStateName, eventName, operationGroupId, isTargetHalted);
         }
         public override void OnStrategyError(SchedulingStrategy strategy, string strategyDescription)
         {

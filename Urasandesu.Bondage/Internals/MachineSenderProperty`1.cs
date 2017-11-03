@@ -39,8 +39,8 @@ namespace Urasandesu.Bondage.Internals
     class MachineSenderProperty<TSender>
         where TSender : class, IMethodizedMachineSender
     {
-        readonly static WeakReferenceTable<MachineId, TSender> ms_senders = new WeakReferenceTable<MachineId, TSender>();
-        readonly static SenderStorage<TSender> ms_senderStorage = new MachineSenderStorage<TSender>();
+        readonly static WeakReferenceKeyValueTable<MachineId, TSender> ms_senders = new WeakReferenceKeyValueTable<MachineId, TSender>();
+        readonly static SenderTypeBuilder<TSender> ms_senderStorage = new MachineSenderTypeBuilder<TSender>();
         readonly static Lazy<Type> ms_senderType = new Lazy<Type>(() => ms_senderStorage.DefineSenderType());
         public static TSender Get(CommunicationId key, MachineId id)
         {

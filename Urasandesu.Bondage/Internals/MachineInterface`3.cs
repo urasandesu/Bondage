@@ -37,11 +37,7 @@ namespace Urasandesu.Bondage.Internals
         where TBundler : class, IMethodizedMachineSender, IMethodizedMachineReceiver, IMethodizedMachineStatus
         where TReceiver : MethodizedMachineReceiver<TBundler>, IMethodizedMachineReceiver
     {
-        internal MachineInterface(TReceiver receiver)
-        {
-            Receiver = receiver;
-        }
-
-        public TReceiver Receiver { get; private set; }
+        internal MachineInterface()
+        { }
     }
 }

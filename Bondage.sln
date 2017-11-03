@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.12
+VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Urasandesu.Bondage", "Urasandesu.Bondage\Urasandesu.Bondage.csproj", "{4ABBB6FA-723F-4C62-BC66-8C47E57B6DA4}"
 EndProject
@@ -20,6 +20,18 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Urasandesu.NAnonym", "Enkidu\NAnonym\Test.Urasandesu.NAnonym\Test.Urasandesu.NAnonym.csproj", "{885BCF21-BAA1-4179-B679-27C4DC7F14A3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Urasandesu.NAnonym", "Enkidu\NAnonym\Urasandesu.NAnonym\Urasandesu.NAnonym.csproj", "{C04A5E86-30E1-4C38-B916-324D000E240E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Urasandesu.Bondage.Application", "Test.Urasandesu.Bondage.Application\Test.Urasandesu.Bondage.Application.csproj", "{292514EC-63D2-4CEA-B587-B096128E7AEE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NAnonymIsolatedProcess.Clr20", "Enkidu\NAnonym\NAnonymIsolatedProcess.Clr20\NAnonymIsolatedProcess.Clr20.csproj", "{A84D07F7-0EF1-4BC8-AB89-C9BC348A5FAA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NAnonymIsolatedProcess.Clr20.X86", "Enkidu\NAnonym\NAnonymIsolatedProcess.Clr20.X86\NAnonymIsolatedProcess.Clr20.X86.csproj", "{74822DBB-A200-49EC-9D4C-8320C2F158B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Urasandesu.NAnonym.Remoting", "Enkidu\NAnonym\Urasandesu.NAnonym.Remoting\Urasandesu.NAnonym.Remoting.csproj", "{7E5604F1-60ED-44DF-8CBB-C8EA2A309543}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NAnonymIsolatedProcess", "Enkidu\NAnonym\NAnonymIsolatedProcess\NAnonymIsolatedProcess.csproj", "{F9D6CE6C-E0BD-4684-9963-531E1B8357E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NAnonymIsolatedProcess.X86", "Enkidu\NAnonym\NAnonymIsolatedProcess.X86\NAnonymIsolatedProcess.X86.csproj", "{57AF3FB7-CEAC-47C1-85AF-15969DB1BAAF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +67,30 @@ Global
 		{C04A5E86-30E1-4C38-B916-324D000E240E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C04A5E86-30E1-4C38-B916-324D000E240E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C04A5E86-30E1-4C38-B916-324D000E240E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{292514EC-63D2-4CEA-B587-B096128E7AEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{292514EC-63D2-4CEA-B587-B096128E7AEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{292514EC-63D2-4CEA-B587-B096128E7AEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{292514EC-63D2-4CEA-B587-B096128E7AEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A84D07F7-0EF1-4BC8-AB89-C9BC348A5FAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A84D07F7-0EF1-4BC8-AB89-C9BC348A5FAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A84D07F7-0EF1-4BC8-AB89-C9BC348A5FAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A84D07F7-0EF1-4BC8-AB89-C9BC348A5FAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74822DBB-A200-49EC-9D4C-8320C2F158B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74822DBB-A200-49EC-9D4C-8320C2F158B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74822DBB-A200-49EC-9D4C-8320C2F158B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74822DBB-A200-49EC-9D4C-8320C2F158B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E5604F1-60ED-44DF-8CBB-C8EA2A309543}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E5604F1-60ED-44DF-8CBB-C8EA2A309543}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E5604F1-60ED-44DF-8CBB-C8EA2A309543}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E5604F1-60ED-44DF-8CBB-C8EA2A309543}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9D6CE6C-E0BD-4684-9963-531E1B8357E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9D6CE6C-E0BD-4684-9963-531E1B8357E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9D6CE6C-E0BD-4684-9963-531E1B8357E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9D6CE6C-E0BD-4684-9963-531E1B8357E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57AF3FB7-CEAC-47C1-85AF-15969DB1BAAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57AF3FB7-CEAC-47C1-85AF-15969DB1BAAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57AF3FB7-CEAC-47C1-85AF-15969DB1BAAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57AF3FB7-CEAC-47C1-85AF-15969DB1BAAF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -65,6 +101,11 @@ Global
 		{02B3992B-5459-4707-A32E-E816C1693922} = {C1F68226-7F9A-4224-BD95-839ADCD85749}
 		{885BCF21-BAA1-4179-B679-27C4DC7F14A3} = {02B3992B-5459-4707-A32E-E816C1693922}
 		{C04A5E86-30E1-4C38-B916-324D000E240E} = {02B3992B-5459-4707-A32E-E816C1693922}
+		{A84D07F7-0EF1-4BC8-AB89-C9BC348A5FAA} = {02B3992B-5459-4707-A32E-E816C1693922}
+		{74822DBB-A200-49EC-9D4C-8320C2F158B4} = {02B3992B-5459-4707-A32E-E816C1693922}
+		{7E5604F1-60ED-44DF-8CBB-C8EA2A309543} = {02B3992B-5459-4707-A32E-E816C1693922}
+		{F9D6CE6C-E0BD-4684-9963-531E1B8357E9} = {02B3992B-5459-4707-A32E-E816C1693922}
+		{57AF3FB7-CEAC-47C1-85AF-15969DB1BAAF} = {02B3992B-5459-4707-A32E-E816C1693922}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5D41520F-5821-45D7-A914-1F2C58D4127D}

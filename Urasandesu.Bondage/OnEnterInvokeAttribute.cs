@@ -48,7 +48,7 @@ namespace Urasandesu.Bondage
             Action = action;
         }
 
-        public string Action { get; private set; }
+        public string Action { get; }
 
         internal override void SetStateAttributeTo<TSender, TReceiver, TBundler>(StateBuildInfo stateBuildInfo, IEnumerable<TypeBuilder> allStateBldrs)
         {

@@ -111,8 +111,8 @@ namespace Test.Urasandesu.Bondage
 
 
             // Act
-            runtimeHost.New(MachineInterface.Sender<M1.ISender>().Bundler<M1.IBundler>().Receiver(new M1.Receiver()));
-            runtimeHost.New(MachineInterface.Sender<M2.ISender>().Bundler<M2.IBundler>().Receiver(new M2.Receiver()));
+            runtimeHost.New(MachineInterface.Sender<M1.ISender>().Bundler<M1.IBundler>().Receiver<M1.Receiver>());
+            runtimeHost.New(MachineInterface.Sender<M2.ISender>().Bundler<M2.IBundler>().Receiver<M2.Receiver>());
 
 
             // Assert

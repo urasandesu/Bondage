@@ -39,13 +39,19 @@ namespace Test.Urasandesu.Bondage.ReferenceImplementations
     public class LogUpdated : ApplicationEvent
     {
         [DataMember]
-        public MachineId StorageNodeId { get; private set; }
+        MachineId m_storageNodeId;
+        public IStorageNodeSender StorageNode
+        {
+            get => GetSender<IStorageNodeSender>(m_storageNodeId);
+            set => SetSender(ref m_storageNodeId, value);
+        }
+
         [DataMember]
         public long Log { get; private set; }
 
-        public LogUpdated(MachineId snId, long log)
+        public LogUpdated(IStorageNodeSender storageNode, long log)
         {
-            StorageNodeId = snId;
+            StorageNode = storageNode;
             Log = log;
         }
     }

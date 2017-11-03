@@ -33,7 +33,7 @@ using Urasandesu.Bondage;
 
 namespace Test.Urasandesu.Bondage.ReferenceImplementations.Monitors
 {
-    class LivenessMonitorReceiver : MethodizedMonitorReceiver<ILivenessMonitorBundler>, ILivenessMonitorReceiver
+    public class LivenessMonitorReceiver : MethodizedMonitorReceiver<ILivenessMonitorBundler>, ILivenessMonitorReceiver
     {
         public void HandleAck(Ack e)
         {

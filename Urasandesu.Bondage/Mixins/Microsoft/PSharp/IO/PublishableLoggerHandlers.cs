@@ -39,7 +39,7 @@ namespace Urasandesu.Bondage.Mixins.Microsoft.PSharp.IO
     public delegate void MonitorCreatedHandler(string monitorTypeName, MonitorId monitorId);
     public delegate void DefaultHandler(MachineId machineId, string currentStateName);
     public delegate void DequeuedHandler(MachineId machineId, string currentStateName, string eventName);
-    public delegate void EnqueuedHandler(MachineId machineId, string currentStateName, string eventName);
+    public delegate void EnqueuedHandler(MachineId machineId, string eventName);
     public delegate void ErrorHandler(string text);
     public delegate void HaltHandler(MachineId machineId, int inboxSize);
     public delegate void MachineActionHandler(MachineId machineId, string currentStateName, string actionName);
@@ -55,7 +55,7 @@ namespace Urasandesu.Bondage.Mixins.Microsoft.PSharp.IO
     public delegate void PushedHandler(MachineId machineId, string currentStateName, string newStateName);
     public delegate void RandomHandler(MachineId machineId, object result);
     public delegate void ReceivedHandler(MachineId machineId, string currentStateName, string eventName, bool wasBlocked);
-    public delegate void SentHandler(MachineId targetMachineId, string targetStateName, MachineId senderId, string senderStateName, string eventName, Guid? operationGroupId, bool isTargetHalted);
+    public delegate void SentHandler(MachineId targetMachineId, MachineId senderId, string senderStateName, string eventName, Guid? operationGroupId, bool isTargetHalted);
     public delegate void StrategyErrorHandler(SchedulingStrategy strategy, string strategyDescription);
     public delegate void WaitedHandler(MachineId machineId, string currentStateName, string eventNames);
 }

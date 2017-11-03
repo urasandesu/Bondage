@@ -61,15 +61,17 @@ namespace Test.Urasandesu.Bondage
             var configuration = Configuration.Create().WithMonitorsInProductionEnabled();
             var runtime = PSharpRuntime.Create(configuration);
             var runtimeHost = HostInfo.NewRuntimeHost(runtime);
-            var safetyMonitor = runtimeHost.New(MonitorInterface.Sender<ISafetyMonitorSender>().Bundler<ISafetyMonitorBundler>().Receiver(new SafetyMonitorReceiver()));
+            var safetyMonitor = runtimeHost.New(MonitorInterface.Sender<ISafetyMonitorSender>().Bundler<ISafetyMonitorBundler>().Receiver<SafetyMonitorReceiver>());
 
 
             // Act
             var messages = new MessageCollection();
             safetyMonitor.Configure(new ConfigureSafetyMonitor(messages));
 
-            var snId = runtime.NewMachine(typeof(StorageNode));
-            safetyMonitor.Handshake(new HandshakeSafetyMonitor(new[] { snId }));
+            var storageNodeId = runtime.NewMachine(typeof(StorageNode));
+            var storageNodeMock = new Mock<IStorageNodeSender>();
+            storageNodeMock.SetupGet(_ => _.Id).Returns(storageNodeId);
+            safetyMonitor.Handshake(new HandshakeSafetyMonitor(new[] { storageNodeMock.Object }));
 
 
             // Assert
@@ -84,17 +86,19 @@ namespace Test.Urasandesu.Bondage
             var configuration = Configuration.Create().WithMonitorsInProductionEnabled();
             var runtime = PSharpRuntime.Create(configuration);
             var runtimeHost = HostInfo.NewRuntimeHost(runtime);
-            var safetyMonitor = runtimeHost.New(MonitorInterface.Sender<ISafetyMonitorSender>().Bundler<ISafetyMonitorBundler>().Receiver(new SafetyMonitorReceiver()));
+            var safetyMonitor = runtimeHost.New(MonitorInterface.Sender<ISafetyMonitorSender>().Bundler<ISafetyMonitorBundler>().Receiver<SafetyMonitorReceiver>());
 
 
             // Act
             var messages = new MessageCollection();
             safetyMonitor.Configure(new ConfigureSafetyMonitor(messages));
 
-            var snId = runtime.NewMachine(typeof(StorageNode));
-            safetyMonitor.Handshake(new HandshakeSafetyMonitor(new[] { snId }));
+            var storageNodeId = runtime.NewMachine(typeof(StorageNode));
+            var storageNodeMock = new Mock<IStorageNodeSender>();
+            storageNodeMock.SetupGet(_ => _.Id).Returns(storageNodeId);
+            safetyMonitor.Handshake(new HandshakeSafetyMonitor(new[] { storageNodeMock.Object }));
 
-            safetyMonitor.LogUpdated(new LogUpdated(snId, 42));
+            safetyMonitor.LogUpdated(new LogUpdated(storageNodeMock.Object, 42));
 
 
             // Assert
@@ -114,7 +118,7 @@ namespace Test.Urasandesu.Bondage
             var setIfHandledSync = logger.MachineActionHandledSet((_1, _2, actionName) => actionName == "HandleSync");
             logger.ApplySynchronization(setIfHandledSync);
             runtimeHost.SetLogger(logger);
-            var server = runtimeHost.New(MachineInterface.Sender<IServerSender>().Bundler<IServerBundler>().Receiver(new ServerReceiver()));
+            var server = runtimeHost.New(MachineInterface.Sender<IServerSender>().Bundler<IServerBundler>().Receiver<ServerReceiverWithoutBug>());
 
 
             // Act
@@ -158,12 +162,12 @@ namespace Test.Urasandesu.Bondage
 
                 // Act
                 var sw1 = Stopwatch.StartNew();
-                runtimeHost.New(MonitorInterface.Sender<ISafetyMonitorSender>().Bundler<ISafetyMonitorBundler>().Receiver(new SafetyMonitorReceiver()));
+                runtimeHost.New(MonitorInterface.Sender<ISafetyMonitorSender>().Bundler<ISafetyMonitorBundler>().Receiver<SafetyMonitorReceiver>());
                 var elapsed1 = sw1.ElapsedTicks;
 
                 var sw10 = Stopwatch.StartNew();
                 for (var i = 0; i < 10; i++)
-                    runtimeHost.New(MonitorInterface.Sender<ISafetyMonitorSender>().Bundler<ISafetyMonitorBundler>().Receiver(new SafetyMonitorReceiver()));
+                    runtimeHost.New(MonitorInterface.Sender<ISafetyMonitorSender>().Bundler<ISafetyMonitorBundler>().Receiver<SafetyMonitorReceiver>());
                 var elapsed10 = sw10.ElapsedTicks;
 
 
@@ -187,12 +191,12 @@ namespace Test.Urasandesu.Bondage
 
                 // Act
                 var sw1 = Stopwatch.StartNew();
-                runtimeHost.New(MachineInterface.Sender<IServerSender>().Bundler<IServerBundler>().Receiver(new ServerReceiver()));
+                runtimeHost.New(MachineInterface.Sender<IServerSender>().Bundler<IServerBundler>().Receiver<ServerReceiverWithoutBug>());
                 var elapsed1 = sw1.ElapsedTicks;
 
                 var sw10 = Stopwatch.StartNew();
                 for (var i = 0; i < 10; i++)
-                    runtimeHost.New(MachineInterface.Sender<IServerSender>().Bundler<IServerBundler>().Receiver(new ServerReceiver()));
+                    runtimeHost.New(MachineInterface.Sender<IServerSender>().Bundler<IServerBundler>().Receiver<ServerReceiverWithoutBug>());
                 var elapsed10 = sw10.ElapsedTicks;
 
 
@@ -218,7 +222,7 @@ namespace Test.Urasandesu.Bondage
                 var runtimeHost = HostInfo.NewRuntimeHost(runtime);
 
                 ctx = runtimeHost.New<DistributedStorageContext>();
-                ctx.SafetyMonitor = runtimeHost.New(MonitorInterface.Sender<ISafetyMonitorSender>().Bundler<ISafetyMonitorBundler>().Receiver(new SafetyMonitorReceiver()));
+                ctx.SafetyMonitor = runtimeHost.New(MonitorInterface.Sender<ISafetyMonitorSender>().Bundler<ISafetyMonitorBundler>().Receiver<SafetyMonitorReceiver>());
                 expected = RuntimeHelpers.GetHashCode(ctx.SafetyMonitor);
             }
 
@@ -246,7 +250,7 @@ namespace Test.Urasandesu.Bondage
                 var runtimeHost = HostInfo.NewRuntimeHost(runtime);
 
                 var ctx = runtimeHost.New<DistributedStorageContext>();
-                ctx.SafetyMonitor = runtimeHost.New(MonitorInterface.Sender<ISafetyMonitorSender>().Bundler<ISafetyMonitorBundler>().Receiver(new SafetyMonitorReceiver()));
+                ctx.SafetyMonitor = runtimeHost.New(MonitorInterface.Sender<ISafetyMonitorSender>().Bundler<ISafetyMonitorBundler>().Receiver<SafetyMonitorReceiver>());
                 expected = RuntimeHelpers.GetHashCode(ctx.SafetyMonitor);
                 parameter = ctx.ToJson();
             }
@@ -287,7 +291,7 @@ namespace Test.Urasandesu.Bondage
                         runtimeHost.SetNetworkProvider(networkProvider);
 
                         var ctx = runtimeHost.New<DistributedStorageContext>();
-                        ctx.SafetyMonitor = runtimeHost.New(MonitorInterface.Sender<ISafetyMonitorSender>().Bundler<ISafetyMonitorBundler>().Receiver(new SafetyMonitorReceiver()));
+                        ctx.SafetyMonitor = runtimeHost.New(MonitorInterface.Sender<ISafetyMonitorSender>().Bundler<ISafetyMonitorBundler>().Receiver<SafetyMonitorReceiver>());
                         ctx.SafetyMonitor.Configure(new ConfigureSafetyMonitor(new MessageCollection()));
                         expected_Assign_.Invoke(RuntimeHelpers.GetHashCode(ctx.SafetyMonitor));
                         parameter = ctx.ToJson();
@@ -297,7 +301,7 @@ namespace Test.Urasandesu.Bondage
                     {
                         var ctx = parameter_.FromJson<DistributedStorageContext>();
                         actual_Assign__.Invoke(RuntimeHelpers.GetHashCode(ctx.SafetyMonitor));
-                        ctx.SafetyMonitor.Handshake(new HandshakeSafetyMonitor(new MachineId[0]));
+                        ctx.SafetyMonitor.Handshake(new HandshakeSafetyMonitor(new IStorageNodeSender[0]));
                     }, actual_Assign_, parameter);
                 }
             }, expected_Assign, actual_Assign);
@@ -324,7 +328,7 @@ namespace Test.Urasandesu.Bondage
                 var runtimeHost = HostInfo.NewRuntimeHost(runtime);
 
                 ctx = runtimeHost.New<DistributedStorageContext>();
-                ctx.Server = runtimeHost.New(MachineInterface.Sender<IServerSender>().Bundler<IServerBundler>().Receiver(new ServerReceiver()));
+                ctx.Server = runtimeHost.New(MachineInterface.Sender<IServerSender>().Bundler<IServerBundler>().Receiver<ServerReceiverWithoutBug>());
                 expected = RuntimeHelpers.GetHashCode(ctx.Server);
             }
 
@@ -352,7 +356,7 @@ namespace Test.Urasandesu.Bondage
                 var runtimeHost = HostInfo.NewRuntimeHost(runtime);
 
                 var ctx = runtimeHost.New<DistributedStorageContext>();
-                ctx.Server = runtimeHost.New(MachineInterface.Sender<IServerSender>().Bundler<IServerBundler>().Receiver(new ServerReceiver()));
+                ctx.Server = runtimeHost.New(MachineInterface.Sender<IServerSender>().Bundler<IServerBundler>().Receiver<ServerReceiverWithoutBug>());
                 expected = RuntimeHelpers.GetHashCode(ctx.Server);
                 parameter = ctx.ToJson();
             }
@@ -397,7 +401,7 @@ namespace Test.Urasandesu.Bondage
                         runtimeHost.SetNetworkProvider(networkProvider);
 
                         var ctx = runtimeHost.New<DistributedStorageContext>();
-                        ctx.Server = runtimeHost.New(MachineInterface.Sender<IServerSender>().Bundler<IServerBundler>().Receiver(new ServerReceiver()));
+                        ctx.Server = runtimeHost.New(MachineInterface.Sender<IServerSender>().Bundler<IServerBundler>().Receiver<ServerReceiverWithoutBug>());
                         ctx.Server.Configure(new ConfigureServer(new MessageCollection(), null, null));
                         expected_Assign_.Invoke(RuntimeHelpers.GetHashCode(ctx.Server));
                         parameter = ctx.ToJson();
@@ -474,9 +478,9 @@ namespace Test.Urasandesu.Bondage
 
         static void NewMonitors(RuntimeHost runtimeHost, DistributedStorageContext ctx, MessageCollection messages)
         {
-            ctx.SafetyMonitor = runtimeHost.New(MonitorInterface.Sender<ISafetyMonitorSender>().Bundler<ISafetyMonitorBundler>().Receiver(new SafetyMonitorReceiver()));
+            ctx.SafetyMonitor = runtimeHost.New(MonitorInterface.Sender<ISafetyMonitorSender>().Bundler<ISafetyMonitorBundler>().Receiver<SafetyMonitorReceiver>());
             ctx.SafetyMonitor.Configure(new ConfigureSafetyMonitor(messages));
-            ctx.LivenessMonitor = runtimeHost.New(MonitorInterface.Sender<ILivenessMonitorSender>().Bundler<ILivenessMonitorBundler>().Receiver(new LivenessMonitorReceiver()));
+            ctx.LivenessMonitor = runtimeHost.New(MonitorInterface.Sender<ILivenessMonitorSender>().Bundler<ILivenessMonitorBundler>().Receiver<LivenessMonitorReceiver>());
         }
 
         static string StartServers(string sctx, IPublishableLogger logger, out DomainCommunicationProvider networkProvider)
@@ -497,7 +501,7 @@ namespace Test.Urasandesu.Bondage
 
         static void NewServers(RuntimeHost runtimeHost, DistributedStorageContext ctx, MessageCollection messages)
         {
-            ctx.Server = runtimeHost.New(MachineInterface.Sender<IServerSender>().Bundler<IServerBundler>().Receiver(new ServerReceiver()));
+            ctx.Server = runtimeHost.New(MachineInterface.Sender<IServerSender>().Bundler<IServerBundler>().Receiver<ServerReceiverWithoutBug>());
             ctx.Server.Configure(new ConfigureServer(messages, ctx.SafetyMonitor, ctx.LivenessMonitor));
         }
 
@@ -523,12 +527,12 @@ namespace Test.Urasandesu.Bondage
             var storageNodes = new List<IStorageNodeSender>();
             for (var i = 0; i < 3; i++)
             {
-                var storageNode = runtimeHost.New(MachineInterface.Sender<IStorageNodeSender>().Bundler<IStorageNodeBundler>().Receiver(new StorageNodeReceiver()));
+                var storageNode = runtimeHost.New(MachineInterface.Sender<IStorageNodeSender>().Bundler<IStorageNodeBundler>().Receiver<StorageNodeReceiver>());
                 storageNode.Configure(configure);
                 storageNode.Handshake(new HandshakeStorageNode(ctx.Server));
                 storageNodes.Add(storageNode);
             }
-            ctx.SafetyMonitor.Handshake(new HandshakeSafetyMonitor(storageNodes.Select(_ => _.Id).ToArray()));
+            ctx.SafetyMonitor.Handshake(new HandshakeSafetyMonitor(storageNodes.ToArray()));
             ctx.StorageNodes = storageNodes.ToArray();
         }
 
@@ -560,7 +564,7 @@ namespace Test.Urasandesu.Bondage
 
         static void NewClients(RuntimeHost runtimeHost, DistributedStorageContext ctx, MessageCollection messages)
         {
-            ctx.Client = runtimeHost.New(MachineInterface.Sender<IClientSender>().Bundler<IClientBundler>().Receiver(new ClientReceiverMock()));
+            ctx.Client = runtimeHost.New(MachineInterface.Sender<IClientSender>().Bundler<IClientBundler>().Receiver<ClientReceiverMock>());
             ctx.Client.Configure(new ConfigureClient(messages, ctx.Server));
             ctx.Server.Handshake(new HandshakeServer(ctx.Client, ctx.StorageNodes));
         }

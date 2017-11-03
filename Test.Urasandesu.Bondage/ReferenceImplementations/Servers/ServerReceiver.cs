@@ -29,12 +29,13 @@
 
 
 
+using Microsoft.PSharp;
 using System;
 using Urasandesu.Bondage;
 
 namespace Test.Urasandesu.Bondage.ReferenceImplementations.Servers
 {
-    class ServerReceiver : MethodizedMachineReceiver<IServerBundler>, IServerReceiver
+    public abstract class ServerReceiver : MethodizedMachineReceiver<IServerBundler>, IServerReceiver
     {
         MessageCollection m_messages;
         ISafetyMonitorSender m_safetyMonitor;
@@ -43,11 +44,6 @@ namespace Test.Urasandesu.Bondage.ReferenceImplementations.Servers
         IStorageNodeSender[] m_storageNodes;
         int m_dataToReplicate;
         long m_log;
-#if FIXES_SAFETY_BUG
-        HashSet<MachineId> m_numReplicas = new HashSet<MachineId>();
-#else
-        int m_numReplicas;
-#endif
 
         public virtual void HandleConfigure(ConfigureServer e)
         {
@@ -83,31 +79,20 @@ namespace Test.Urasandesu.Bondage.ReferenceImplementations.Servers
             }
             else
             {
-#if FIXES_SAFETY_BUG
-                if (!m_numReplicas.Add(snId))
-                    return;
-
-                if (m_numReplicas.Count == 3)
-#else
-                m_numReplicas++;
-                if (m_numReplicas == 3)
-#endif
+                if (VerifyReplication(storageNode.Id))
                 {
                     m_safetyMonitor.Ack(new Ack());
                     m_livenessMonitor.Ack(new Ack());
                     m_client.Ack(new Ack());
                     m_log = DateTime.Now.Ticks;
                     m_messages.Add(new Message<Sync>() { Id = Id, Event = e, Value = $"response ack: { m_client.Id }, log: { m_log }" });
-#if FIXES_LIVENESS_BUG
-#if FIXES_SAFETY_BUG
-                    m_numReplicas.Clear();
-#else
-                    m_numReplicas = 0;
-#endif
-#endif
+                    RefreshReplication();
                 }
             }
         }
+
+        protected abstract bool VerifyReplication(MachineId storageNodeId);
+        protected abstract void RefreshReplication();
 
         bool IsUpToDate(long log)
         {

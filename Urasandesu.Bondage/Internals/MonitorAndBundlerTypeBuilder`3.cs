@@ -1,5 +1,5 @@
 ﻿/* 
- * File: MonitorAndBundlerStorage`3.cs
+ * File: MonitorAndBundlerTypeBuilder`3.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -37,12 +37,12 @@ using Urasandesu.NAnonym.Mixins.System;
 
 namespace Urasandesu.Bondage.Internals
 {
-    class MonitorAndBundlerStorage<TSender, TBundler, TReceiver> : TransitionAndBundlerStorage<TSender, TBundler, TReceiver>
+    class MonitorAndBundlerTypeBuilder<TSender, TBundler, TReceiver> : TransitionAndBundlerTypeBuilder<TSender, TBundler, TReceiver>
         where TSender : class, IMethodizedMonitorSender
         where TBundler : class, IMethodizedMonitorSender, IMethodizedMonitorReceiver, IMethodizedMonitorStatus
         where TReceiver : MethodizedMonitorReceiver<TBundler>, IMethodizedMonitorReceiver
     {
-        protected override SenderStorage<TSender> SenderStorage { get; } = new MonitorSenderStorage<TSender>();
+        protected override SenderTypeBuilder<TSender> SenderTypeBuilder { get; } = new MonitorSenderTypeBuilder<TSender>();
 
         protected override Type ReceiverTypeBase => typeof(IMethodizedMonitorReceiver);
 

@@ -1,5 +1,5 @@
 ﻿/* 
- * File: WeakReferenceTable`2.cs
+ * File: WeakReferenceKeyTable`2.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -39,12 +39,12 @@ namespace Urasandesu.Bondage.Infrastructures
 {
 
     [SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable", Justification = "The Timer should continue to run until the timing that garbage collector collects this instance.")]
-    public class WeakReferenceTable<TKey, TValue> where TKey : class
+    public class WeakReferenceKeyTable<TKey, TValue> where TKey : class
     {
         readonly ConcurrentDictionary<WeakReferenceKey<TKey>, TValue> m_entries;
         readonly ST::Timer m_gc;
 
-        public WeakReferenceTable()
+        public WeakReferenceKeyTable()
         {
             m_entries = new ConcurrentDictionary<WeakReferenceKey<TKey>, TValue>();
             m_gc = new ST::Timer(CollectGarbage, m_entries, 0, 1000);

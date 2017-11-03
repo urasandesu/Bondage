@@ -30,13 +30,12 @@
 
 
 using Microsoft.Practices.Unity;
-using Microsoft.PSharp;
 
 namespace Urasandesu.Bondage.Application
 {
     public abstract class ApplicationController
     {
         [Dependency]
-        public PSharpRuntime Runtime { protected get; set; }
+        public RuntimeHost RuntimeHost { protected get; set; }
     }
 }

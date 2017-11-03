@@ -1,5 +1,5 @@
 ﻿/* 
- * File: SenderStorage.cs
+ * File: SenderTypeBuilder.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -37,13 +37,13 @@ using System.Reflection.Emit;
 
 namespace Urasandesu.Bondage.Internals
 {
-    abstract class SenderStorage
+    abstract class SenderTypeBuilder
     {
-        static SenderStorage()
+        static SenderTypeBuilder()
         {
             AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
             {
-                if (!args.Name.StartsWith("<Urasandesu.Bondage.Internals>"))
+                if (!args.Name.StartsWith("Urasandesu.Bondage.Internals"))
                     return null;
 
                 return AppDomain.CurrentDomain.GetAssemblies().First(_ => _.FullName == args.Name);
@@ -58,7 +58,7 @@ namespace Urasandesu.Bondage.Internals
 
         public ModuleBuilder DefineTemporaryModuleBuilder()
         {
-            var asmName = new AssemblyName("<Urasandesu.Bondage.Internals>" + Guid.NewGuid().ToString("N"));
+            var asmName = new AssemblyName("Urasandesu.Bondage.Internals." + Guid.NewGuid().ToString("N"));
             var asmBldr = AppDomain.CurrentDomain.DefineDynamicAssembly(asmName, AssemblyBuilderAccess.Run);
             var modBldr = asmBldr.DefineDynamicModule(asmName.Name + ".dll");
             return modBldr;

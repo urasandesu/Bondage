@@ -1,5 +1,5 @@
 ﻿/* 
- * File: MachineAndBundlerStorage`3.cs
+ * File: MachineSenderTypeBuilder`1.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -32,34 +32,18 @@
 using Microsoft.PSharp;
 using System;
 using System.Reflection;
-using Urasandesu.NAnonym.Mixins.System;
 
 namespace Urasandesu.Bondage.Internals
 {
-    class MachineAndBundlerStorage<TSender, TBundler, TReceiver> : TransitionAndBundlerStorage<TSender, TBundler, TReceiver>
+    class MachineSenderTypeBuilder<TSender> : SenderTypeBuilder<TSender>
         where TSender : class, IMethodizedMachineSender
-        where TBundler : class, IMethodizedMachineSender, IMethodizedMachineReceiver, IMethodizedMachineStatus
-        where TReceiver : MethodizedMachineReceiver<TBundler>, IMethodizedMachineReceiver
     {
-        protected override SenderStorage<TSender> SenderStorage { get; } = new MachineSenderStorage<TSender>();
-
-        protected override Type ReceiverTypeBase => typeof(IMethodizedMachineReceiver);
-
-        protected override string TransitionTypeName => "<Machine>" + typeof(TBundler).FullNameWithoutNestedTypeQualification();
-
-        protected override Type TransitionParentType => typeof(ApplicationMachine<TBundler>);
-
-        protected override Type TransitionStateParentType => typeof(MachineState);
-
-        protected override Type TransitionType => typeof(Machine);
-
-        protected override Type BundlerGenericParentTypeDefinition => typeof(MethodizedMachineBundler<>);
+        protected override Type SenderParentType => typeof(MethodizedMachineSender);
 
         protected override Type TransitionIdType => typeof(MachineId);
 
-        protected override MethodInfo GetHandledLogMethod(Type baseType)
-        {
-            return baseType.GetMethod("MachineHandledLog", BindingFlags.NonPublic | BindingFlags.Instance);
-        }
+        protected override Type SenderTypeBase => typeof(IMethodizedMachineSender);
+
+        protected override MethodInfo SendEventMethod => typeof(RuntimeHost).GetMethod("SendEvent");
     }
 }
