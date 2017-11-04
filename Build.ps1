@@ -67,9 +67,15 @@ switch ($PsCmdlet.ParameterSetName) {
     'Package' { 
         $solution = "Bondage.sln"
         nuget restore $solution
+
         pushd Enkidu
         cmd /c "rmdir packages & mklink /D packages ..\packages"
         popd
+
+        pushd Unity.Contrib
+        cmd /c "rmdir packages & mklink /D packages ..\packages"
+        popd
+
         $configurations = "/p:Configuration=Release"
         foreach ($configuration in $configurations) {
             Write-Verbose ("Solution: {0}" -f $solution)

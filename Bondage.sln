@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.27004.2006
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Urasandesu.Bondage", "Urasandesu.Bondage\Urasandesu.Bondage.csproj", "{4ABBB6FA-723F-4C62-BC66-8C47E57B6DA4}"
 EndProject
@@ -32,6 +32,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NAnonymIsolatedProcess", "Enkidu\NAnonym\NAnonymIsolatedProcess\NAnonymIsolatedProcess.csproj", "{F9D6CE6C-E0BD-4684-9963-531E1B8357E9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NAnonymIsolatedProcess.X86", "Enkidu\NAnonym\NAnonymIsolatedProcess.X86\NAnonymIsolatedProcess.X86.csproj", "{57AF3FB7-CEAC-47C1-85AF-15969DB1BAAF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unity.Contrib", "Unity.Contrib", "{A150DD3B-5FD8-4770-9F23-5DA83BC867DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Urasandesu.Unity.Contrib", "Unity.Contrib\Test.Urasandesu.Unity.Contrib\Test.Urasandesu.Unity.Contrib.csproj", "{FB7C5232-BE0E-413A-B5A5-34301C3BA00A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Urasandesu.Unity.Contrib", "Unity.Contrib\Urasandesu.Unity.Contrib\Urasandesu.Unity.Contrib.csproj", "{5534B80E-B362-4087-B139-5BC7A018E126}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,6 +97,14 @@ Global
 		{57AF3FB7-CEAC-47C1-85AF-15969DB1BAAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57AF3FB7-CEAC-47C1-85AF-15969DB1BAAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57AF3FB7-CEAC-47C1-85AF-15969DB1BAAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB7C5232-BE0E-413A-B5A5-34301C3BA00A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB7C5232-BE0E-413A-B5A5-34301C3BA00A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB7C5232-BE0E-413A-B5A5-34301C3BA00A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB7C5232-BE0E-413A-B5A5-34301C3BA00A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5534B80E-B362-4087-B139-5BC7A018E126}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5534B80E-B362-4087-B139-5BC7A018E126}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5534B80E-B362-4087-B139-5BC7A018E126}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5534B80E-B362-4087-B139-5BC7A018E126}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -106,6 +120,8 @@ Global
 		{7E5604F1-60ED-44DF-8CBB-C8EA2A309543} = {02B3992B-5459-4707-A32E-E816C1693922}
 		{F9D6CE6C-E0BD-4684-9963-531E1B8357E9} = {02B3992B-5459-4707-A32E-E816C1693922}
 		{57AF3FB7-CEAC-47C1-85AF-15969DB1BAAF} = {02B3992B-5459-4707-A32E-E816C1693922}
+		{FB7C5232-BE0E-413A-B5A5-34301C3BA00A} = {A150DD3B-5FD8-4770-9F23-5DA83BC867DF}
+		{5534B80E-B362-4087-B139-5BC7A018E126} = {A150DD3B-5FD8-4770-9F23-5DA83BC867DF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5D41520F-5821-45D7-A914-1F2C58D4127D}

@@ -1,3 +1,6 @@
 [submodule "Enkidu"]
 	path = Enkidu
 	url = git@github.com:urasandesu/Enkidu.git
+[submodule "Unity.Contrib"]
+	path = Unity.Contrib
+	url = git@github.com:urasandesu/Unity.Contrib.git

@@ -32,6 +32,7 @@
 using Microsoft.Practices.Unity;
 using Microsoft.PSharp;
 using System;
+using Urasandesu.Unity.Contrib;
 
 namespace Urasandesu.Bondage
 {
@@ -58,7 +59,7 @@ namespace Urasandesu.Bondage
 
             var container = Container.CreateChildContainer();
             container.
-                RegisterType<RuntimeHost, RuntimeHost>(new ContainerControlledLifetimeManager()).
+                RegisterTypeIfMissing<RuntimeHost>(new ContainerControlledLifetimeManager()).
                 RegisterInstance(runtime);
 
             return container.Resolve<RuntimeHost>();

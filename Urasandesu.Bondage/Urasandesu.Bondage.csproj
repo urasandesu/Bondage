@@ -266,6 +266,10 @@
       <Project>{770e332d-79c4-4184-a220-0c74a73bf1b9}</Project>
       <Name>Urasandesu.Enkidu</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Unity.Contrib\Urasandesu.Unity.Contrib\Urasandesu.Unity.Contrib.csproj">
+      <Project>{5534b80e-b362-4087-b139-5bc7a018e126}</Project>
+      <Name>Urasandesu.Unity.Contrib</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx" />
